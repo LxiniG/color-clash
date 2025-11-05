@@ -484,4 +484,4 @@ function assignColorsDeterministic(players, prefs, palette) {
 }
 
 const proto = USE_TLS ? 'wss' : 'ws';
-console.log(`WebSocket server running on ${proto}://${PUBLIC_DOMAIN}:${PORT} (bound to ${WS_HOST})`);
+console.log(`WebSocket server running on ${proto}://${WS_HOST}:${PORT} (bound to ${WS_HOST})`);
