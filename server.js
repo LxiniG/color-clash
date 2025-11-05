@@ -11,9 +11,8 @@ dotenv.config();
 // WS_HOST - host/address to bind the server (default 0.0.0.0)
 // PUBLIC_DOMAIN - public domain for log messages / client connection hints (default localhost)
 // USE_TLS - set to '1' or 'true' when the public connection is wss (optional; server TLS requires additional setup)
-const PORT = Number(process.env.PORT) || 3000;
-const WS_HOST = process.env.WS_HOST || '0.0.0.0';
-const PUBLIC_DOMAIN = process.env.PUBLIC_DOMAIN || 'localhost';
+const PORT = 3000;
+const WS_HOST = "ws://color-clash-zqke.onrender.com"
 const USE_TLS = process.env.USE_TLS === '1' || process.env.USE_TLS === 'true';
 
 // Bind to a host/address when provided. If you plan to serve WSS (TLS), see notes below —
