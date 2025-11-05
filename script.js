@@ -1,6 +1,6 @@
 // Player name length limit (base, not including suffix)
 
-const PUBLIC_DOMAIN = "color-clash-zqke.onrender.com:3000";
+const PUBLIC_DOMAIN = "color-clash-zqke.onrender.com:3005";
 
 const PLAYER_NAME_LENGTH = 12;
 document.addEventListener('DOMContentLoaded', () => {
