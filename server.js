@@ -1,9 +1,24 @@
 // Player name length limit (base, not including suffix)
 const PLAYER_NAME_LENGTH = 12;
+import dotenv from 'dotenv';
 import { WebSocketServer } from 'ws';
-const PORT = 3000;
 
-const wss = new WebSocketServer({ port: PORT });
+// Load environment variables from .env (if present)
+dotenv.config();
+
+// Configurable via .env:
+// PORT - port to bind the WebSocket server (default 3000)
+// WS_HOST - host/address to bind the server (default 0.0.0.0)
+// PUBLIC_DOMAIN - public domain for log messages / client connection hints (default localhost)
+// USE_TLS - set to '1' or 'true' when the public connection is wss (optional; server TLS requires additional setup)
+const PORT = Number(process.env.PORT) || 3000;
+const WS_HOST = process.env.WS_HOST || '0.0.0.0';
+const PUBLIC_DOMAIN = process.env.PUBLIC_DOMAIN || 'localhost';
+const USE_TLS = process.env.USE_TLS === '1' || process.env.USE_TLS === 'true';
+
+// Bind to a host/address when provided. If you plan to serve WSS (TLS), see notes below —
+// the ws server must be attached to an HTTPS server instead of using the `port`/`host` options.
+const wss = new WebSocketServer({ port: PORT, host: WS_HOST });
 
 // Room management structure:
 // rooms = {
@@ -469,4 +484,5 @@ function assignColorsDeterministic(players, prefs, palette) {
     return assigned;
 }
 
-console.log(`WebSocket server running on ws://localhost:${PORT}`);
+const proto = USE_TLS ? 'wss' : 'ws';
+console.log(`WebSocket server running on ${proto}://${PUBLIC_DOMAIN}:${PORT} (bound to ${WS_HOST})`);

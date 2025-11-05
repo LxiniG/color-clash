@@ -1,4 +1,7 @@
 // Player name length limit (base, not including suffix)
+
+const PUBLIC_DOMAIN = "color-clash-zqke.onrender.com:3000";
+
 const PLAYER_NAME_LENGTH = 12;
 document.addEventListener('DOMContentLoaded', () => {
     // Shared name sanitization and validity functions (top-level)
@@ -52,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function connectWebSocket() {
         if (ws && ws.readyState === WebSocket.OPEN) return;
-        ws = new WebSocket('ws://localhost:3000');
+        ws = new WebSocket(`ws://${PUBLIC_DOMAIN}`);
         ws.onopen = () => {
             console.debug('[WebSocket] Connected, requesting room list');
             ws.send(JSON.stringify({ type: 'list' }));
@@ -959,31 +962,31 @@ document.addEventListener('DOMContentLoaded', () => {
         onlinePlayerNameInput.addEventListener('blur', handleSanitize);
         onlinePlayerNameInput.addEventListener('change', handleSanitize);
         onlinePlayerNameInput.addEventListener('keydown', nameInputKeydownHandler);
-    // Shared keydown handler for name inputs
-    function nameInputKeydownHandler(e) {
-        const el = e.target;
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            el.blur();
-        } else if (e.key === ' ') {
-            e.preventDefault();
-            const start = el.selectionStart;
-            const end = el.selectionEnd;
-            const value = el.value;
-            if (value.length < PLAYER_NAME_LENGTH) {
-                el.value = value.slice(0, start) + '_' + value.slice(end);
-                el.setSelectionRange(start + 1, start + 1);
-                el.dispatchEvent(new Event('input', { bubbles: true }));
+        // Shared keydown handler for name inputs
+        function nameInputKeydownHandler(e) {
+            const el = e.target;
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                el.blur();
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                const start = el.selectionStart;
+                const end = el.selectionEnd;
+                const value = el.value;
+                if (value.length < PLAYER_NAME_LENGTH) {
+                    el.value = value.slice(0, start) + '_' + value.slice(end);
+                    el.setSelectionRange(start + 1, start + 1);
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            }
+            // Only allow arrow navigation out if input is empty
+            if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') && el.value === '') {
+                // Allow default behavior (navigation)
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                // Prevent navigation if not empty
+                e.stopPropagation();
             }
         }
-        // Only allow arrow navigation out if input is empty
-        if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') && el.value === '') {
-            // Allow default behavior (navigation)
-        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-            // Prevent navigation if not empty
-            e.stopPropagation();
-        }
-    }
     }
 
     // set dynamic bounds
